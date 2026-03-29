@@ -21,7 +21,7 @@ app.add_middleware(
 
 # Use absolute path to avoid path issues
 BASE_DIR = Path(__file__).parent.resolve()
-MODEL_PATH = BASE_DIR / "models" / "intel_image_model.keras"
+MODEL_PATH = BASE_DIR / "models" / "intel_image_weights2.weights.h5"
 
 print(f"Looking for model at: {MODEL_PATH}")
 

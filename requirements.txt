@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+streamlit
+tensorflow==2.21.0
+pillow
+python-multipart
+plotly
+pandas
+uvicorn[standard]
+numpy

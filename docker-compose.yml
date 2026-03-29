@@ -1,0 +1,34 @@
+services:
+  api:
+    build: .
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - ./models:/app/models
+      - ./data:/app/data
+    environment:
+      - TF_USE_LEGACY_KERAS=1
+    networks:
+      - app-network
+
+  streamlit:
+    build: .
+    command: streamlit run app.py --server.port 8501 --server.address 0.0.0.0
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app
+      - ./models:/app/models
+      - ./data:/app/data
+    depends_on:
+      - api
+    networks:
+      - app-network
+    environment:
+      - API_URL=http://api:8000
+
+networks:
+  app-network:
+    driver: bridge

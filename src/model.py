@@ -1,10 +1,10 @@
 # src/model.py
-import tensorflow as tf
-from tensorflow.keras import layers, models, applications
 import os
+import tensorflow as tf
+import keras
+from tensorflow.keras import layers, models, applications
 
 from .preprocessing import IMG_HEIGHT, IMG_WIDTH, get_class_names
-
 
 def create_model():
     """Create a fresh model (used for retraining)"""
@@ -28,56 +28,40 @@ def create_model():
     return model
 
 
-def load_trained_model(model_path='../models/intel_image_model.keras'):
-    """Load the saved model with better error handling"""
+def load_trained_model(model_path='../models/intel_image_weights2.weights.h5'):
+    """Build model architecture then load trained weights"""
+    print(f"Loading weights from: {model_path}")
+
     if not os.path.exists(model_path):
-        raise FileNotFoundError(f"Model file not found at: {model_path}")
+        raise FileNotFoundError(f"Weights file not found at: {model_path}")
 
-    print(f"Loading model from: {model_path}")
+    base_model = keras.applications.MobileNetV2(
+        input_shape=(IMG_HEIGHT, IMG_WIDTH, 3),
+        include_top=False,
+        weights=None
+    )
+    base_model.trainable = False
 
-    try:
-        # Try loading with custom objects
-        model = tf.keras.models.load_model(
-            model_path,
-            compile=False,
-            custom_objects={
-                'preprocess_input': tf.keras.applications.mobilenet_v2.preprocess_input
-            }
-        )
+    inputs = keras.Input(shape=(IMG_HEIGHT, IMG_WIDTH, 3))
+    x = base_model(inputs, training=False)
+    x = keras.layers.GlobalAveragePooling2D()(x)
+    x = keras.layers.Dropout(0.3)(x)
+    x = keras.layers.Dense(256, activation='relu')(x)
+    x = keras.layers.Dropout(0.2)(x)
+    outputs = keras.layers.Dense(6, activation='softmax')(x)
+    model = keras.Model(inputs, outputs)
 
-        # Re-compile the model after loading
-        model.compile(
-            optimizer='adam',
-            loss='categorical_crossentropy',
-            metrics=['accuracy']
-        )
+    model.load_weights(model_path)
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-        print("✅ Model loaded successfully!")
-        print(f"Input shape: {model.input_shape}")
-        return model
-
-    except Exception as e:
-        print(f"❌ Failed to load model: {e}")
-        print("\nTrying alternative loading method...")
-
-        # Alternative: Load without the Lambda layer issue
-        try:
-            model = tf.keras.models.load_model(model_path, compile=False)
-            model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-            print("✅ Model loaded with alternative method!")
-            return model
-        except Exception as e2:
-            print(f"Alternative also failed: {e2}")
-            raise
+    print("✅ Model loaded with trained weights!")
+    return model
 
 
 def fine_tune_model(model, train_ds, val_ds, epochs=5):
-    """Fine-tune the top layers of the model"""
-    # Unfreeze the base model partially
-    base_model = model.layers[0]  # MobileNetV2 is usually the first layer now
+    """Fine-tuning function"""
+    base_model = model.layers[0]
     base_model.trainable = True
-
-    # Freeze all except the last 50 layers
     for layer in base_model.layers[:-50]:
         layer.trainable = False
 
@@ -87,6 +71,5 @@ def fine_tune_model(model, train_ds, val_ds, epochs=5):
         metrics=['accuracy']
     )
 
-    print("Starting fine-tuning...")
     history = model.fit(train_ds, validation_data=val_ds, epochs=epochs, verbose=2)
     return history

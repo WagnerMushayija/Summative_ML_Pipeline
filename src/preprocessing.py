@@ -13,7 +13,6 @@ class_names = ['buildings', 'forest', 'glacier', 'mountain', 'sea', 'street']
 def load_and_preprocess_data(train_dir='../data/train', test_dir='../data/test'):
     """Load and preprocess train, validation and test datasets"""
 
-    # Load train dataset with validation split
     train_ds = tf.keras.preprocessing.image_dataset_from_directory(
         train_dir,
         validation_split=0.2,
@@ -42,20 +41,18 @@ def load_and_preprocess_data(train_dir='../data/train', test_dir='../data/test')
         shuffle=False
     )
 
-    # Apply MobileNetV2 preprocessing
+    # Apply preprocessing
     preprocess_input = tf.keras.applications.mobilenet_v2.preprocess_input
 
     train_ds = train_ds.map(lambda x, y: (preprocess_input(x), y), num_parallel_calls=tf.data.AUTOTUNE)
     val_ds = val_ds.map(lambda x, y: (preprocess_input(x), y), num_parallel_calls=tf.data.AUTOTUNE)
     test_ds = test_ds.map(lambda x, y: (preprocess_input(x), y), num_parallel_calls=tf.data.AUTOTUNE)
 
-    # Prefetch for performance
     train_ds = train_ds.prefetch(tf.data.AUTOTUNE)
     val_ds = val_ds.prefetch(tf.data.AUTOTUNE)
     test_ds = test_ds.prefetch(tf.data.AUTOTUNE)
 
     return train_ds, val_ds, test_ds
-
 
 def get_data_augmentation():
     """Return data augmentation pipeline"""
