@@ -39,6 +39,7 @@ def root():
 
 
 @app.post("/predict/")
+@app.post("/predict/")
 async def predict_image(file: UploadFile = File(...)):
     try:
         # Save uploaded file temporarily
@@ -56,16 +57,17 @@ async def predict_image(file: UploadFile = File(...)):
         if temp_path.exists():
             os.remove(temp_path)
 
-        # FIXED: Convert numpy float32 to Python float for JSON serialization
+        # FIXED: Handle probabilities as dict properly
         return JSONResponse(content={
             "filename": file.filename,
             "prediction": result["class"],
-            "confidence": float(result["confidence"]),           # ← Fixed
-            "probabilities": [float(p) for p in result["probabilities"]]  # ← Fixed
+            "confidence": float(result.get("confidence", 0.0)),
+            "probabilities": result.get("probabilities", {})   # Keep as dict - it's already clean
         })
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        import traceback
+        raise HTTPException(status_code=500, detail=f"{str(e)}\n{traceback.format_exc()}")
 
 if __name__ == "__main__":
     import uvicorn
