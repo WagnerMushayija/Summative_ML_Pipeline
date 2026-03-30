@@ -56,16 +56,16 @@ async def predict_image(file: UploadFile = File(...)):
         if temp_path.exists():
             os.remove(temp_path)
 
+        # FIXED: Convert numpy float32 to Python float for JSON serialization
         return JSONResponse(content={
             "filename": file.filename,
             "prediction": result["class"],
-            "confidence": result["confidence"],
-            "probabilities": result["probabilities"]
+            "confidence": float(result["confidence"]),           # ← Fixed
+            "probabilities": [float(p) for p in result["probabilities"]]  # ← Fixed
         })
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
 
 if __name__ == "__main__":
     import uvicorn
