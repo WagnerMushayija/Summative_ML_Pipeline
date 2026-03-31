@@ -5,13 +5,24 @@
 A complete Machine Learning pipeline for classifying images into 6 categories (buildings, forest, glacier, mountain, sea, street) using MobileNetV2 transfer learning.
 
 **Features:**
-- Data acquisition & preprocessing
-- Model training + fine-tuning (MobileNetV2)
-- Single image prediction
-- Bulk upload + retraining trigger
-- Visualizations with interpretations (in Streamlit)
-- Docker deployment
-- Load testing with Locust
+- ✅ Data loading and preprocessing (image_dataset_from_directory)
+- ✅ Transfer learning with MobileNetV2 + two-stage fine-tuning
+- ✅ Model evaluation (accuracy, classification report, confusion matrix)
+- ✅ Single image prediction with confidence
+- ✅ Bulk upload + retraining trigger
+- ✅ Visualizations + 3 feature interpretations (color, brightness, class distribution)
+- ✅ Dockerization (FastAPI + Streamlit)
+- ✅ Load testing with Locust
+- ✅ API with proper error handling and CORS
+
+**Technologies Used**
+
+- ML Framework: TensorFlow / Keras (MobileNetV2)
+- Backend: FastAPI
+- Frontend: Streamlit
+- Containerization: Docker + docker-compose
+- Load Testing: Locust
+- Cloud: Render
 
 ## Project Structure
 Summative_ML_Pipeline/
