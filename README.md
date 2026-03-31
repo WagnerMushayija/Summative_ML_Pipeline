@@ -25,6 +25,7 @@ A complete Machine Learning pipeline for classifying images into 6 categories (b
 - Cloud: Render
 
 ## Project Structure
+```markdown
 Summative_ML_Pipeline/
 ├── README.md
 ├── docker-compose.yml
@@ -45,7 +46,7 @@ Summative_ML_Pipeline/
 │   ├── prediction.py
 │   └── retrainer.py
 └── notebook/               
-
+```
 
 #### 4. Setup Instructions (Clear & Numbered)
 
@@ -66,7 +67,7 @@ FastAPI: http://localhost:8000
 
 #### 5. Load Testing Results (This is key for the assignment)
 
-```markdown
+
 ## Load Testing with Locust
 
 **Tested on Render API (`https://summative-api.onrender.com`)**
@@ -75,12 +76,12 @@ FastAPI: http://localhost:8000
 - RPS: ~1.2
 - Failures: 0%
 - Median latency: 2500 ms
-
-![image 1](screenshots\Screenshot 2026-03-31 121829.png)
-![image 2](screenshots\Screenshot 2026-03-31 122108.png)
-![imag 3](screenshots\Screenshot 2026-03-31 122311.png)
-![image 4](screenshots\Screenshot 2026-03-31 1234042.png)
-
+```markdown
+![image 1](screenshots/Screenshot 2026-03-31 121829.png)
+![image 2](screenshots/Screenshot 2026-03-31 122108.png)
+![image 3](screenshots/Screenshot 2026-03-31 122311.png)
+![image 4](screenshots/Screenshot 2026-03-31 123042.png)
+```
 
 **Note:** Render free tier shows higher latency due to cold starts. With keep-warm script, performance is stable.
 ```
