@@ -1,5 +1,8 @@
 # Summative_ML_Pipeline
 
+**YouTube Demo Link (`https://youtu.be/EtZZNyNooTc`)**
+
+
 # Intel Image Classification MLOps Pipeline
 
 A complete Machine Learning pipeline for classifying images into 6 categories (buildings, forest, glacier, mountain, sea, street) using MobileNetV2 transfer learning.
