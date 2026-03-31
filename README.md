@@ -88,5 +88,5 @@ FastAPI: http://localhost:8000
 ## 6. Deployment
 
 - **Backend API**: Deployed on Render → https://summative-api.onrender.com
-- **Frontend**: Streamlit (can be deployed separately on Render)
+- **Frontend**: Streamlit -> https://summative-streamlit.onrender.com/
 - **Docker**: Fully containerized with `docker-compose.yml`
