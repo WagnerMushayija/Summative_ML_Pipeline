@@ -66,7 +66,7 @@ FastAPI: http://localhost:8000
 
 #### 5. Load Testing Results (This is key for the assignment)
 
-```markdown
+
 ## Load Testing with Locust
 
 **Tested on Render API (`https://summative-api.onrender.com`)**
